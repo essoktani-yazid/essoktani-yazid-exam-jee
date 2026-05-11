@@ -1,0 +1,44 @@
+<div class="container mt-4">
+  <h2>Liste des Véhicules</h2>
+  
+  <div class="alert alert-danger" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <table class="table table-striped" *ngIf="vehicules.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Marque & Modèle</th>
+        <th>Matricule</th>
+        <th>Prix/Jour</th>
+        <th>Statut</th>
+        <th>Détails Spécifiques</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let v of vehicules">
+        <td>{{ v.id }}</td>
+        <td>
+          <span class="badge" 
+                [ngClass]="v.type === 'Voiture' ? 'bg-primary' : 'bg-success'">
+            {{ v.type }}
+          </span>
+        </td>
+        <td>{{ v.marque }} {{ v.modele }}</td>
+        <td>{{ v.matricule }}</td>
+        <td>{{ v.prixParJour }} MAD</td>
+        <td>{{ v.statut }}</td>
+        <td>
+          <span *ngIf="v.type === 'Voiture'">
+            Portes: {{ v.nombrePortes }} | Boite: {{ v.boiteVitesse }}
+          </span>
+          <span *ngIf="v.type === 'Moto'">
+            Cylindrée: {{ v.cylindree }}cc | Casque: {{ v.casqueInclus ? 'Oui' : 'Non' }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
