@@ -30,7 +30,7 @@ public class BackendApplication {
         SpringApplication.run(BackendApplication.class, args);
     }
 
-    @Bean
+//    @Bean
     CommandLineRunner testService(IVehiculeService vehiculeService) {
         return args -> {
             System.out.println("=========================================");
@@ -70,7 +70,7 @@ public class BackendApplication {
         };
     }
 
-//    @Bean
+    @Bean
     CommandLineRunner start(AgenceRepository agenceRepository,
                             VehiculeRepository vehiculeRepository,
                             LocationRepository locationRepository) {
