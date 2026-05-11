@@ -1,5 +1,8 @@
 package ma.enset.yazid.essoktani.exam;
 
+import ma.enset.yazid.essoktani.exam.dtos.AgenceDTO;
+import ma.enset.yazid.essoktani.exam.dtos.VehiculeDTO;
+import ma.enset.yazid.essoktani.exam.dtos.VoitureDTO;
 import ma.enset.yazid.essoktani.exam.entities.Agence;
 import ma.enset.yazid.essoktani.exam.entities.Location;
 import ma.enset.yazid.essoktani.exam.entities.Moto;
@@ -11,12 +14,14 @@ import ma.enset.yazid.essoktani.exam.enums.TypeMoto;
 import ma.enset.yazid.essoktani.exam.repositories.AgenceRepository;
 import ma.enset.yazid.essoktani.exam.repositories.LocationRepository;
 import ma.enset.yazid.essoktani.exam.repositories.VehiculeRepository;
+import ma.enset.yazid.essoktani.exam.services.IVehiculeService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
+import java.util.List;
 
 @SpringBootApplication
 public class BackendApplication {
@@ -26,6 +31,46 @@ public class BackendApplication {
     }
 
     @Bean
+    CommandLineRunner testService(IVehiculeService vehiculeService) {
+        return args -> {
+            System.out.println("=========================================");
+            System.out.println("Début du test de la couche Service...");
+
+            AgenceDTO agenceDTO = new AgenceDTO();
+            agenceDTO.setNom("Global Auto");
+            agenceDTO.setVille("Mohammedia");
+            agenceDTO.setAdresse("Centre ville");
+            agenceDTO.setTelephone("0500112233");
+
+            AgenceDTO savedAgence = vehiculeService.saveAgence(agenceDTO);
+            System.out.println("Agence sauvegardée avec ID : " + savedAgence.getId());
+
+            VoitureDTO voitureDTO = new VoitureDTO();
+            voitureDTO.setMarque("Renault");
+            voitureDTO.setModele("Clio 5");
+            voitureDTO.setMatricule("1111-A-1");
+            voitureDTO.setPrixParJour(300.0);
+            voitureDTO.setDateMiseEnService(new Date());
+            voitureDTO.setStatut(StatutVehicule.DISPONIBLE);
+            voitureDTO.setNombrePortes(5);
+            voitureDTO.setTypeCarburant(TypeCarburant.DIESEL);
+            voitureDTO.setBoiteVitesse(BoiteVitesse.MANUELLE);
+
+            VoitureDTO savedVoiture = vehiculeService.saveVoiture(voitureDTO);
+            System.out.println("Voiture sauvegardée, type reçu : " + savedVoiture.getType());
+
+            System.out.println("--- Liste des véhicules ---");
+            List<VehiculeDTO> vehicules = vehiculeService.listVehicules();
+            vehicules.forEach(v -> {
+                System.out.println("- " + v.getMarque() + " " + v.getModele() + " (Type: " + v.getType() + ")");
+            });
+
+            System.out.println("Test de la couche Service terminé avec succès !");
+            System.out.println("=========================================");
+        };
+    }
+
+//    @Bean
     CommandLineRunner start(AgenceRepository agenceRepository,
                             VehiculeRepository vehiculeRepository,
                             LocationRepository locationRepository) {
